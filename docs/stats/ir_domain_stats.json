@@ -1,0 +1,13 @@
+{
+  "mean": [
+    0.6548780251351946
+  ],
+  "num_channels": 1,
+  "num_images": 12770,
+  "resolution": 1024,
+  "sample_limit_used": null,
+  "std": [
+    0.16240292861795716
+  ],
+  "target_domain": "ir"
+}

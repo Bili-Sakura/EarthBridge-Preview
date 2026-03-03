@@ -1,0 +1,13 @@
+{
+  "mean": [
+    0.23143243496674565
+  ],
+  "num_channels": 1,
+  "num_images": 89065,
+  "resolution": 256,
+  "sample_limit_used": null,
+  "std": [
+    0.12552007487633712
+  ],
+  "target_domain": "eo"
+}
