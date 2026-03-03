@@ -155,7 +155,7 @@ discriminator_layers: 3
 
 ## DBIM Baseline
 
-**Description:** Diffusion Bridge Image-to-Image Models (DBIM). DBIM shares the same UNet architecture
+**Description:** Diffusion Bridge Implicit Models (DBIM). DBIM shares the same UNet architecture
 as DDBM and differs only in the sampling algorithm. Parameter counts are identical to DDBM above.
 
 See `docs/model_parameters.md` DDBM section for exact parameter counts per task.
