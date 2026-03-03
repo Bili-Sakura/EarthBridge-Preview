@@ -9,7 +9,10 @@ namespace so that DBIM pipelines do not rely on re-exported DDBM symbols.
 
 from __future__ import annotations
 
-from typing import Any, Optional, Tuple, Union
+from typing import TYPE_CHECKING, Any, Optional, Tuple, Union
+
+if TYPE_CHECKING:
+    from .pixnerd_backbone import PixNerdBackbone
 
 from .unet_ddbm import (
     DDBMUNet,
@@ -40,7 +43,7 @@ class DBIMEDMUNet(EDMUNet):
 class DBIMEDM2UNet(EDM2UNet):
     """DBIM EDM2-style UNet (disabled; see create_dbim_model)."""
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:  # pragma: no cover
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         raise ValueError(
             "DBIM EDM2 UNet is disabled. Use adm/edm/vdm types via create_dbim_model."
         )
@@ -70,7 +73,7 @@ def create_dbim_model(
     unet_type: str = UNET_TYPE_ADM,
     attention_head_dim: Optional[int] = 64,
     **kwargs: Any,
-) -> Union[DBIMUNet, DBIMEDMUNet, DBIMVDMUNet, "PixNerdBackbone"]:
+) -> Union[DBIMUNet, DBIMEDMUNet, DBIMVDMUNet, PixNerdBackbone]:
     """Factory for DBIM backbone models.
 
     Mirrors :func:`src.models.unet_ddbm.create_model` but instantiates DBIM
