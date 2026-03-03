@@ -40,6 +40,11 @@ class DBIMEDMUNet(EDMUNet):
 class DBIMEDM2UNet(EDM2UNet):
     """DBIM EDM2-style UNet (disabled; see create_dbim_model)."""
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:  # pragma: no cover
+        raise ValueError(
+            "DBIM EDM2 UNet is disabled. Use adm/edm/vdm types via create_dbim_model."
+        )
+
 
 class DBIMVDMUNet(VDMUNet):
     """DBIM VDM-style UNet with DBIM namespace."""
@@ -102,10 +107,9 @@ def create_dbim_model(
         image_size, attention_resolutions, channel_mult
     )
 
-    cm_effective = cm_tuple if cm_tuple is not None else _channel_mult_for_resolution(image_size)
     parsed_num_res_blocks = _parse_layers_per_block(
         num_res_blocks,
-        num_levels=len(cm_effective),
+        num_levels=len(cm_tuple if cm_tuple is not None else _channel_mult_for_resolution(image_size)),
         allow_variable=False,
     )
 
