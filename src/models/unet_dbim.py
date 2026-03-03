@@ -79,6 +79,7 @@ def create_dbim_model(
     Mirrors :func:`src.models.unet_ddbm.create_model` but instantiates DBIM
     namespaced classes so DBIM code paths remain self-contained.
     """
+    # EDM2 is explicitly disabled for DBIM, so handle it before the general validation.
     if unet_type == UNET_TYPE_EDM2:
         cfg = get_unet_type_config(UNET_TYPE_EDM2)
         issue = cfg.get(
@@ -113,9 +114,10 @@ def create_dbim_model(
         image_size, attention_resolutions, channel_mult
     )
 
-    num_levels = len(
+    channel_mult_levels = (
         cm_tuple if cm_tuple is not None else _channel_mult_for_resolution(image_size)
     )
+    num_levels = len(channel_mult_levels)
     parsed_num_res_blocks = _parse_layers_per_block(
         num_res_blocks,
         num_levels=num_levels,
