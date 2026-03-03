@@ -9,8 +9,7 @@ This repository is a **preview release** of the EarthBridge codebase, containing
 | Baseline | Reference | Description |
 |----------|-----------|-------------|
 | **DDBM** | [ICLR 2024](https://openreview.net/forum?id=FKksTayvGo) | Denoising Diffusion Bridge Models |
-| **DBIM** | [ICLR
-2025](https://openreview.net/forum?id=eghAocvqBk) | Diffusion Bridge Implicit Models |
+| **DBIM** | [ICLR 2025](https://openreview.net/forum?id=eghAocvqBk) | Diffusion Bridge Implicit Models |
 | **CUT** | [ECCV 2020](https://link.springer.com/chapter/10.1007/978-3-030-58545-7_19) | Contrastive Unpaired Translation |
 
 ## Installation
