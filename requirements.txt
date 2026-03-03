@@ -49,8 +49,8 @@ fsspec==2025.10.0
 ftfy==6.3.1
 gitdb==4.0.12
 GitPython==3.1.46
-gradio==6.5.1
-gradio_client==2.0.3
+gradio==6.7.0
+gradio-client==2.2.0
 groovy==0.1.2
 grpcio==1.76.0
 h11==0.16.0
@@ -126,7 +126,7 @@ pathspec==1.0.4
 peft==0.18.1
 pexpect==4.9.0
 pikepdf==10.3.0
-pillow==12.0.0
+pillow==12.1.1
 platformdirs==4.5.1
 prodigy-plus-schedule-free==2.0.1
 prodigyopt==1.1.2
