@@ -50,6 +50,7 @@ _DBIM_UNET_CLASS_MAP = {
     UNET_TYPE_EDM: DBIMEDMUNet,
     UNET_TYPE_VDM: DBIMVDMUNet,
 }
+# PixNerd uses a different parameter set and is handled explicitly in create_dbim_model.
 
 
 def create_dbim_model(
@@ -137,8 +138,8 @@ __all__ = [
     "DBIMEDM2UNet",
     "DBIMVDMUNet",
     "create_dbim_model",
-    "SUPPORTED_UNET_TYPES",
     "get_unet_type_config",
+    "SUPPORTED_UNET_TYPES",
     "UNET_TYPE_ADM",
     "UNET_TYPE_EDM",
     "UNET_TYPE_EDM2",
