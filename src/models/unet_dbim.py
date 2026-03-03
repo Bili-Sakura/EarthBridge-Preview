@@ -45,7 +45,7 @@ class DBIMEDM2UNet(EDM2UNet):
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         raise ValueError(
-            "DBIM EDM2 UNet is disabled. Use adm/edm/vdm/pixnerd types via create_dbim_model."
+            f"DBIM EDM2 UNet is disabled. Use one of {SUPPORTED_UNET_TYPES} via create_dbim_model."
         )
 
 
@@ -79,14 +79,17 @@ def create_dbim_model(
     Mirrors :func:`src.models.unet_ddbm.create_model` but instantiates DBIM
     namespaced classes so DBIM code paths remain self-contained.
     """
-    if unet_type == UNET_TYPE_EDM2:
-        cfg = get_unet_type_config(UNET_TYPE_EDM2)
-        raise ValueError(
-            f"unet_type 'edm2' is disabled. {cfg.get('issue', 'EDM2 preconditioning is incompatible with DBIM pipelines.')}"
-        )
-    if unet_type not in SUPPORTED_UNET_TYPES:
+    if unet_type not in SUPPORTED_UNET_TYPES and unet_type != UNET_TYPE_EDM2:
         raise ValueError(
             f"unet_type '{unet_type}' not supported. Use one of: {SUPPORTED_UNET_TYPES}"
+        )
+    if unet_type == UNET_TYPE_EDM2:
+        cfg = get_unet_type_config(UNET_TYPE_EDM2)
+        issue = cfg.get(
+            "issue", "EDM2 preconditioning is incompatible with DBIM pipelines."
+        )
+        raise ValueError(
+            f"unet_type 'edm2' is disabled for DBIM pipelines: {issue}"
         )
 
     if unet_type == UNET_TYPE_PIXNERD:
