@@ -79,10 +79,6 @@ def create_dbim_model(
     Mirrors :func:`src.models.unet_ddbm.create_model` but instantiates DBIM
     namespaced classes so DBIM code paths remain self-contained.
     """
-    if unet_type not in SUPPORTED_UNET_TYPES and unet_type != UNET_TYPE_EDM2:
-        raise ValueError(
-            f"unet_type '{unet_type}' not supported. Use one of: {SUPPORTED_UNET_TYPES}"
-        )
     if unet_type == UNET_TYPE_EDM2:
         cfg = get_unet_type_config(UNET_TYPE_EDM2)
         issue = cfg.get(
@@ -90,6 +86,10 @@ def create_dbim_model(
         )
         raise ValueError(
             f"unet_type 'edm2' is disabled for DBIM pipelines: {issue}"
+        )
+    if unet_type not in SUPPORTED_UNET_TYPES:
+        raise ValueError(
+            f"unet_type '{unet_type}' not supported. Use one of: {SUPPORTED_UNET_TYPES}"
         )
 
     if unet_type == UNET_TYPE_PIXNERD:
@@ -113,9 +113,12 @@ def create_dbim_model(
         image_size, attention_resolutions, channel_mult
     )
 
+    num_levels = len(
+        cm_tuple if cm_tuple is not None else _channel_mult_for_resolution(image_size)
+    )
     parsed_num_res_blocks = _parse_layers_per_block(
         num_res_blocks,
-        num_levels=len(cm_tuple if cm_tuple is not None else _channel_mult_for_resolution(image_size)),
+        num_levels=num_levels,
         allow_variable=False,
     )
 
