@@ -65,7 +65,7 @@ def create_dbim_model(
     unet_type: str = UNET_TYPE_ADM,
     attention_head_dim: Optional[int] = 64,
     **kwargs: Any,
-) -> Union[DBIMUNet, DBIMEDMUNet, DBIMVDMUNet]:
+) -> Union[DBIMUNet, DBIMEDMUNet, DBIMVDMUNet, "PixNerdBackbone"]:
     """Factory for DBIM backbone models.
 
     Mirrors :func:`src.models.unet_ddbm.create_model` but instantiates DBIM
@@ -117,6 +117,7 @@ def create_dbim_model(
         attention_resolutions=attn_indices,
         dropout=dropout,
         condition_mode=condition_mode,
+        # Keep None here to allow the underlying UNet to derive defaults from image_size.
         channel_mult=cm_tuple,
         attention_head_dim=attention_head_dim,
     )
