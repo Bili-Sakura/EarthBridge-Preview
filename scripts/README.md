@@ -1,83 +1,49 @@
 # Scripts Directory
 
-This directory contains utility scripts for the 4th-MAVIC-T project.
+This directory contains training scripts and utilities for the EarthBridge preview release.
 
-## Experiment Subfolders
+## Flagship Experiments
 
-### `EXP_0221_SAR2IR/`
+This preview release includes only the flagship experiment configurations where each method achieved its best results. Due to time limitations, comprehensive baselines, hyperparameter tuning, and scaling studies are not included — these are left for community exploration.
 
-Focused 8-GPU DBIM training for failing task `sar2ir`:
+| Task | Method | Script Directory |
+|------|--------|------------------|
+| **sar2eo** | DBIM | `DBIM_Pixel_Medium-0216/` |
+| **sar2rgb** | DBIM | `DBIM_Pixel_Medium-0216/` |
+| **rgb2ir** | DBIM | `DBIM_Pixel_Medium-0216/` |
+| **sar2ir** | CUT | `CUT_Scaled-0218/` |
 
-- `train_dbim_sar2ir_8gpu.sh`
+### `DBIM_Pixel_Medium-0216/`
 
-Uses runtime random crop (`1024 -> 512`) during training and SAR-specific lighter UNet setting
-(`num_channels=96`, `channel_mult="1,1,2,2,4,4"`).
+DBIM (Diffusion Bridge Implicit Models) training and inference scripts for the three tasks where DBIM achieves best results:
 
-### `EXP_0222_SAR2RGB_MULTIRES/`
+- `train_sar2eo.sh` — Train DBIM on SAR→EO (256×256)
+- `train_sar2rgb.sh` — Train DBIM on SAR→RGB (1024×1024)
+- `train_rgb2ir.sh` — Train DBIM on RGB→IR (1024×1024)
+- `run_sar2eo.sh` — Inference for SAR→EO
+- `run_sar2rgb.sh` — Inference for SAR→RGB
+- `run_rgb2ir.sh` — Inference for RGB→IR
+- `eval_all.sh` — Evaluate all three DBIM tasks on paired validation manifests
 
-8-GPU DBIM-only follow-up scripts:
+### `CUT_Scaled-0218/`
 
-- `rgb2ir` quick 1024 tuning from known good 512 checkpoint:  
-  `train_dbim_rgb2ir_1024_quick_from_512_8gpu.sh`
-- `sar2ir` 1024 tuning from EXP-0221 checkpoint:  
-  `train_dbim_sar2ir_1024_from_0221_8gpu.sh`
-- `sar2rgb` Stage A (crop 512):  
-  `train_dbim_sar2rgb_512_8gpu.sh`
-- `sar2rgb` Stage B (direct 1024 fine-tuning):  
-  `train_dbim_sar2rgb_1024_8gpu.sh`
+CUT (Contrastive Unpaired Translation) training script for SAR→IR where CUT achieves best results:
 
-(`sar2eo` intentionally has no script for this experiment batch.)
+- `train_sar2ir.sh` — Train CUT on SAR→IR (1024×1024)
 
-## Available Scripts
+## Utility Scripts
 
 ### `document_model_configs.py`
 
-**Purpose:** Generate comprehensive documentation of model architectures and parameter counts for all baselines.
+**Purpose:** Generate comprehensive documentation of model architectures and parameter counts.
 
 **Usage:**
 ```bash
 python3 scripts/document_model_configs.py
 ```
 
-**Output:** 
-- Creates/updates `docs/model_parameters.md` with detailed configuration and parameter count information for all 6 baselines across all 4 tasks (24 total configurations).
-
-**Features:**
-- Parses configuration files directly (no PyTorch dependency required)
-- Estimates parameter counts based on model architecture
-- Generates formatted markdown tables and detailed configuration sections
-- Includes architecture comparisons and summaries
-
-**Baselines covered:**
-- DDBM (Denoising Diffusion Bridge Models)
-- BiBBDM (Bidirectional Brownian Bridge Diffusion Models)
-- I2SB (Image-to-Image Schrödinger Bridge)
-- DDIB (Dual Diffusion Implicit Bridges)
-- CUT (Contrastive Unpaired Translation)
-- Img2Img-Turbo (Pix2Pix-Turbo)
-
-**Tasks covered:**
-- sar2eo (SAR to EO optical)
-- rgb2ir (RGB to Infrared)
-- sar2ir (SAR to Infrared)
-- sar2rgb (SAR to RGB)
-
-### Model Scaling Variants (`configs/model_scaling_variants.yaml`)
-
-**Purpose:** Comprehensive reference of model-size configurations (small / medium / large / huge) for all baselines and tasks, to support future model-size scaling experiments.
-
-**Location:** `configs/model_scaling_variants.yaml`
-
-**Contents:**
-- Four size tiers per baseline with approximate parameter counts and VRAM guidelines
-- Per-task channel/resolution settings and recommended starting sizes
-- Usage examples showing how to override config fields
-
-**Baselines covered:** DDBM, BiBBDM, I2SB (shared diffusion UNet), DDIB, CUT, Img2Img-Turbo
-
-### `analyze_test_dataset.py`
-
-Analyzes test dataset statistics and metadata.
+**Output:**
+- Creates/updates `docs/model_parameters.md` with detailed configuration and parameter count information.
 
 ### `create_paired_validation_set.py`
 
@@ -90,9 +56,9 @@ python3 scripts/create_paired_validation_set.py --dataset_root ./datasets/BiliSa
 python3 scripts/create_paired_validation_set.py --n_pairs 500 --seed 42
 ```
 
-**Output:** One manifest file per task (`paired_val_sar2eo.txt`, `paired_val_rgb2ir.txt`, etc.) with tab-separated `input_path\ttarget_path` lines.
+### `analyze_test_dataset.py`
 
-**Training integration:** When `paired_val_manifest` is set in the DDBM config (default: `datasets/.../manifests/paired_val_<task>.txt`), validation runs MAVIC-T competition metrics (LPIPS, L1) on the paired val set and logs them to the experiment tracker.
+Analyzes test dataset statistics and metadata.
 
 ### `filter_bad_samples.py`
 
@@ -109,3 +75,9 @@ Prepares cropped versions of the refined dataset with augmentation.
 ### `test_vae_reconstruction.py`
 
 Tests VAE reconstruction quality on sample images.
+
+### Model Scaling Variants (`configs/model_scaling_variants.yaml`)
+
+**Purpose:** Reference of model-size configurations (small / medium / large / huge) for all baselines and tasks, to support community model-size scaling experiments.
+
+**Location:** `configs/model_scaling_variants.yaml`
