@@ -114,10 +114,10 @@ def create_dbim_model(
         image_size, attention_resolutions, channel_mult
     )
 
-    channel_mult_levels = (
+    channel_mult_resolved = (
         cm_tuple if cm_tuple is not None else _channel_mult_for_resolution(image_size)
     )
-    num_levels = len(channel_mult_levels)
+    num_levels = len(channel_mult_resolved)
     parsed_num_res_blocks = _parse_layers_per_block(
         num_res_blocks,
         num_levels=num_levels,
@@ -132,8 +132,7 @@ def create_dbim_model(
         attention_resolutions=attn_indices,
         dropout=dropout,
         condition_mode=condition_mode,
-        # Keep None here to allow the underlying UNet to derive defaults from image_size.
-        channel_mult=cm_tuple,
+        channel_mult=channel_mult_resolved,
         attention_head_dim=attention_head_dim,
     )
 
