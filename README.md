@@ -77,6 +77,18 @@ huggingface-cli download BiliSakura/MaRS-Base-SAR --local-dir models/BiliSakura/
 
 Training scripts support [SwanLab](https://swanlab.cn) for experiment tracking. Install with `pip install swanlab`.
 
+**SwanLab logs**
+
+[![sar2eo](https://raw.githubusercontent.com/SwanHubX/assets/main/badge1.svg)](https://swanlab.cn/@EarthBridge/sar2eo/overview)
+[![sar2ir](https://raw.githubusercontent.com/SwanHubX/assets/main/badge1.svg)](https://swanlab.cn/@EarthBridge/sar2ir/overview)
+[![rgb2ir](https://raw.githubusercontent.com/SwanHubX/assets/main/badge1.svg)](https://swanlab.cn/@EarthBridge/rgb2ir/overview)
+[![sar2rgb](https://raw.githubusercontent.com/SwanHubX/assets/main/badge1.svg)](https://swanlab.cn/@EarthBridge/sar2rgb/overview)
+
+**Public resources**
+
+[![Checkpoint Collection](https://img.shields.io/badge/Hugging%20Face-Checkpoint%20Collection-ffcf2e?logo=github&logoColor=white)](https://huggingface.co/collections/BiliSakura/4th-mavic-t-ckpt-collections)
+[![Dataset](https://img.shields.io/badge/Hugging%20Face-Dataset-8a2be2?logo=github&logoColor=white)](https://huggingface.co/datasets/BiliSakura/MACIV-T-2025)
+
 **Enable SwanLab** — The DDBM scripts in `scripts/DDBM_Pixel_Medium-0213/` already use `--log_with swanlab`. For other trainers, add:
 
 ```bash
