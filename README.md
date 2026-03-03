@@ -2,13 +2,23 @@
 
 **EarthBridge: A Solution for the 4th Multi-modal Aerial View Image Challenge (MAVIC-T) — Translation Track**
 
-This repository is a **preview release** of the EarthBridge codebase, containing the **DBIM**, **DDBM**, and **CUT** baselines used in our competition solution, along with their related training, inference, and evaluation code.
+This repository is a **preview release** of the EarthBridge codebase, containing the **DBIM** and **CUT** baselines used in our competition solution, along with their related training, inference, and evaluation code.
+
+## Flagship Experiments
+
+This preview release includes only the flagship experiment configurations where each method achieved its best results among our experiments. Due to time limitations, comprehensive baselines, hyperparameter tuning, and scaling studies are not included — these are left for community exploration.
+
+| Task | Flagship Method | Script |
+|------|----------------|--------|
+| **sar2eo** (SAR → EO) | DBIM | `scripts/DBIM_Pixel_Medium-0216/train_sar2eo.sh` |
+| **sar2rgb** (SAR → RGB) | DBIM | `scripts/DBIM_Pixel_Medium-0216/train_sar2rgb.sh` |
+| **rgb2ir** (RGB → IR) | DBIM | `scripts/DBIM_Pixel_Medium-0216/train_rgb2ir.sh` |
+| **sar2ir** (SAR → IR) | CUT | `scripts/CUT_Scaled-0218/train_sar2ir.sh` |
 
 ## Baselines Included
 
 | Baseline | Reference | Description |
 |----------|-----------|-------------|
-| **DDBM** | [ICLR 2024](https://openreview.net/forum?id=FKksTayvGo) | Denoising Diffusion Bridge Models |
 | **DBIM** | [ICLR 2025](https://openreview.net/forum?id=eghAocvqBk) | Diffusion Bridge Implicit Models |
 | **CUT** | [ECCV 2020](https://link.springer.com/chapter/10.1007/978-3-030-58545-7_19) | Contrastive Unpaired Translation |
 
@@ -52,9 +62,9 @@ export PROJECT_ROOT=/path/to/EarthBridge-Preview
 | :--- | :--- |
 | **`datasets/`** | `BiliSakura/MACIV-T-2025-Structure-Refined`: `manifests/`, `{task}/train/{input,target}/`, `val/{task}/input/`, `test/{task}/`. See `docs/dataset.md`. |
 | **`models/`** | Pre-trained model weights. |
-| **`src/models/`** | Model implementations: `unet_ddbm`, `unet_dbim`, `cut_model`. |
-| **`examples/`** | Trainer and sample scripts for ddbm, dbim, cut. |
-| **`scripts/`** | Training launchers for DDBM, DBIM, and CUT experiments. |
+| **`src/models/`** | Model implementations: `unet_dbim`, `cut_model`. |
+| **`examples/`** | Trainer and sample scripts for dbim, cut. |
+| **`scripts/`** | Flagship training launchers for DBIM and CUT experiments. |
 | **`ckpt/`** | Checkpoints and SwanLab logs from training runs. |
 
 ### Pre-trained models (MaRS-Base)
@@ -89,7 +99,7 @@ Training scripts support [SwanLab](https://swanlab.cn) for experiment tracking. 
 [![Checkpoint Collection](https://img.shields.io/badge/Hugging%20Face-Checkpoint%20Collection-ffcf2e?logo=github&logoColor=white)](https://huggingface.co/collections/BiliSakura/4th-mavic-t-ckpt-collections)
 [![Dataset](https://img.shields.io/badge/Hugging%20Face-Dataset-8a2be2?logo=github&logoColor=white)](https://huggingface.co/datasets/BiliSakura/MACIV-T-2025)
 
-**Enable SwanLab** — The DDBM scripts in `scripts/DDBM_Pixel_Medium-0213/` already use `--log_with swanlab`. For other trainers, add:
+**Enable SwanLab** — Add `--log_with swanlab` to any training command:
 
 ```bash
 --log_with swanlab
@@ -115,8 +125,6 @@ See [docs/quick_start.md](docs/quick_start.md) for detailed training, inference,
 <a href="https://github.com/huggingface/diffusers">diffusers</a>.
 
 ### Reference papers
-
-<a href="https://openreview.net/forum?id=FKksTayvGo">Denoising Diffusion Bridge Models (DDBM, ICLR 2024)</a>
 
 <a href="https://openreview.net/forum?id=eghAocvqBk">Diffusion Bridge Implicit Models (DBIM, 2025)</a>
 

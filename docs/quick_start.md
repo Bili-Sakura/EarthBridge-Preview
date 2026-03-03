@@ -12,19 +12,18 @@ Use this short guide to get a baseline training run, export predictions, and mea
 
 ## 2. Train a model
 
-This preview release includes three baselines: **DDBM**, **DBIM**, and **CUT**.
+This preview release includes two baselines: **DBIM** and **CUT**, with flagship experiment configurations for each task.
 
-### DDBM (Denoising Diffusion Bridge Models)
+### Flagship Experiments
 
-```bash
-# Single GPU sar2eo training
-python -m examples.ddbm.train_sar2eo --output_dir ./outputs/ddbm_sar2eo --train_batch_size 4
+| Task | Method | Why |
+|------|--------|-----|
+| sar2eo | DBIM | Best results among our experiments |
+| sar2rgb | DBIM | Best results among our experiments |
+| rgb2ir | DBIM | Best results among our experiments |
+| sar2ir | CUT | Best results among our experiments |
 
-# Multi-GPU (accelerate)
-accelerate launch -m examples.ddbm.train_sar2eo --train_batch_size 8
-```
-
-### DBIM (Diffusion Bridge Image-to-Image Models)
+### DBIM (Diffusion Bridge Implicit Models)
 
 ```bash
 # Single GPU sar2eo training
@@ -37,14 +36,14 @@ accelerate launch -m examples.dbim.train_sar2eo --train_batch_size 8
 ### CUT (Contrastive Unpaired Translation)
 
 ```bash
-# Single GPU sar2eo training
-python -m examples.cut.train_sar2eo --output_dir ./outputs/cut_sar2eo --train_batch_size 4
+# Single GPU sar2ir training (flagship task for CUT)
+python -m examples.cut.train_sar2ir --output_dir ./outputs/cut_sar2ir --train_batch_size 4
 
 # Multi-GPU (accelerate)
-accelerate launch -m examples.cut.train_sar2eo --train_batch_size 8
+accelerate launch -m examples.cut.train_sar2ir --train_batch_size 8
 ```
 
-Every config field can be overridden on the command line (see `examples/{ddbm,dbim,cut}/config.py`). Checkpoints are written to the chosen `--output_dir`.
+Every config field can be overridden on the command line (see `examples/{dbim,cut}/config.py`). Checkpoints are written to the chosen `--output_dir`.
 
 ### Experiment tracking (SwanLab / TensorBoard / WandB)
 
@@ -52,7 +51,7 @@ All trainers use `accelerate.log_with` for experiment tracking. **SwanLab** is s
 
 ```bash
 # SwanLab (pip install swanlab)
-python -m examples.ddbm.train_sar2eo --log_with swanlab
+python -m examples.dbim.train_sar2eo --log_with swanlab
 
 # Set SwanLab run metadata from CLI
 python -m examples.cut.train_sar2ir \
@@ -71,26 +70,19 @@ python -m examples.cut.train_sar2ir \
 After training, generate predictions for the val/test inputs:
 
 ```bash
-# DDBM inference
-python -m examples.ddbm.sample \
-  --task sar2eo \
-  --checkpoint_path ./outputs/ddbm_sar2eo \
-  --split test \
-  --output_dir ./samples/ddbm_sar2eo
-
-# DBIM inference
+# DBIM inference (sar2eo example)
 python -m examples.dbim.sample \
   --task sar2eo \
   --checkpoint_path ./outputs/dbim_sar2eo \
   --split test \
   --output_dir ./samples/dbim_sar2eo
 
-# CUT inference
+# CUT inference (sar2ir — flagship task for CUT)
 python -m examples.cut.sample \
-  --task sar2eo \
-  --checkpoint_path ./outputs/cut_sar2eo \
+  --task sar2ir \
+  --checkpoint_path ./outputs/cut_sar2ir \
   --split test \
-  --output_dir ./samples/cut_sar2eo
+  --output_dir ./samples/cut_sar2ir
 ```
 
 The script reads the evaluation inputs, runs the model, and saves PNGs under `--output_dir`.
@@ -103,8 +95,8 @@ For a quick sanity check, compute LPIPS/L1 (and FID when `torchvision` is availa
 import torch
 from torch.utils.data import DataLoader
 from src.utils.metrics import MetricCalculator
-from examples.ddbm.dataset_wrapper import MavicTDDBMDataset
-from examples.ddbm.config import sar2eo_config
+from examples.dbim.dataset_wrapper import MavicTDBIMDataset
+from examples.dbim.config import sar2eo_config
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 cfg = sar2eo_config()
@@ -116,17 +108,16 @@ print(calc.compute())  # -> MetricResults(lpips=..., fid=None, l1=..., score=...
 
 ## 5. Ready-made training scripts
 
-Pre-configured training scripts are available under `scripts/`:
+Pre-configured flagship training scripts are available under `scripts/`:
 
 ```bash
-# DDBM
-bash scripts/DDBM_Pixel_Medium-0213/train_sar2eo.sh
-
-# DBIM
+# DBIM (sar2eo, sar2rgb, rgb2ir)
 bash scripts/DBIM_Pixel_Medium-0216/train_sar2eo.sh
+bash scripts/DBIM_Pixel_Medium-0216/train_sar2rgb.sh
+bash scripts/DBIM_Pixel_Medium-0216/train_rgb2ir.sh
 
-# CUT
-bash scripts/CUT_Scaled-0218/train_sar2eo.sh
+# CUT (sar2ir)
+bash scripts/CUT_Scaled-0218/train_sar2ir.sh
 ```
 
 See `scripts/README.md` for details on each experiment folder.

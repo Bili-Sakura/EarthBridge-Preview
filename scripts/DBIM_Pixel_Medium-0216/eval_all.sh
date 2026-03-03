@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
-# DBIM-Pixel-Medium-0216 — Evaluate all four tasks on paired_val manifests (LPIPS, L1, FID).
-# Reports score for each task: sar2ir, sar2eo, sar2rgb, rgb2ir.
+# DBIM-Pixel-Medium-0216 — Evaluate flagship DBIM tasks on paired_val manifests (LPIPS, L1, FID).
+# Reports score for each task: sar2eo, sar2rgb, rgb2ir.
 #
 # Default checkpoints (override with CKPT_ROOT or per-task CKPT_<TASK>):
-#   CKPT_ROOT/dbim/{sar2ir,sar2eo,sar2rgb,rgb2ir}/checkpoint-100000
+#   CKPT_ROOT/dbim/{sar2eo,sar2rgb,rgb2ir}/checkpoint-100000
 #
 # Without MultiDiffusion (default): 1024px tasks use original 1024px input (full-res, slow).
 #   To use 512px input instead (faster, except sar2eo which stays 256px):
-#   RESOLUTION_SAR2IR=512 RESOLUTION_SAR2RGB=512 RESOLUTION_RGB2IR=512 bash scripts/DBIM_Pixel_Medium-0216/eval_all.sh
+#   RESOLUTION_SAR2RGB=512 RESOLUTION_RGB2IR=512 bash scripts/DBIM_Pixel_Medium-0216/eval_all.sh
 #
 # With MultiDiffusion: OUTPUT_SIZE="1024 1024" for fast tiled inference (val 1024→512 input, tiles→1024).
 #   OUTPUT_SIZE="1024 1024" VIEW_BATCH_SIZE=4 bash scripts/DBIM_Pixel_Medium-0216/eval_all.sh
@@ -95,24 +95,6 @@ done
 
 # Task config: task_name | resolution
 # sar2eo uses 256; others use 1024
-eval_sar2ir() {
-  local res="${RESOLUTION_SAR2IR:-1024}"
-  local ckpt="${CKPT_SAR2IR:-${CKPT_ROOT}/sar2ir/checkpoint-100000}"
-  local manifest="${MANIFEST_DIR}/paired_val_sar2ir.txt"
-  if [[ ! -d "${ckpt}" ]]; then echo "  [skip] checkpoint not found: ${ckpt}"; return 0; fi
-  echo "--- sar2ir (resolution=${res}) ---"
-  python -m examples.dbim.evaluate_metrics \
-    --checkpoint_dir "${ckpt}" \
-    --manifest "${manifest}" \
-    --task sar2ir \
-    --batch_size "${BATCH_SIZE}" \
-    --num_inference_steps "${NUM_STEPS}" \
-    --resolution "${res}" \
-    --device "${DEVICE}" \
-    "${EXTRA_MD_ARGS[@]}" \
-    "$@"
-}
-
 eval_sar2eo() {
   local res="${RESOLUTION_SAR2EO:-256}"
   local ckpt="${CKPT_SAR2EO:-${CKPT_ROOT}/sar2eo/checkpoint-100000}"
@@ -181,7 +163,7 @@ if [[ -n "${MD_STRIDE}" ]]; then
   EXTRA_MD_ARGS+=(--multidiffusion_stride "${MD_STRIDE}")
 fi
 
-echo "=== Evaluating DBIM on all four tasks ==="
+echo "=== Evaluating DBIM on flagship tasks ==="
 echo "CKPT_ROOT:   ${CKPT_ROOT}"
 echo "MANIFEST_DIR: ${MANIFEST_DIR}"
 echo "BATCH_SIZE:  ${BATCH_SIZE}"
@@ -196,9 +178,6 @@ if [[ -n "${OUTPUT_SIZE}" ]]; then
 fi
 echo ""
 
-eval_sar2ir
-echo ""
-
 eval_sar2eo
 echo ""
 
@@ -207,4 +186,4 @@ echo ""
 
 eval_rgb2ir
 
-echo "=== Done (all tasks) ==="
+echo "=== Done (flagship tasks) ==="
