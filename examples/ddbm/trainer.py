@@ -776,7 +776,10 @@ class DDBMTrainer:
                     if isinstance(mod, Attention):
                         mod.set_processor(AttnProcessor2_0())
                         count += 1
-                logger.info(f"[{cfg.task_name}] Enabled PyTorch 2.0 SDPA (flash-attention backend) on {count} attention layers")
+                logger.info(
+                    "[%s] Enabled PyTorch 2.0 SDPA (flash-attention) on %d attention layers",
+                    cfg.task_name, count,
+                )
             except Exception as e:
                 logger.warning(
                     "Could not enable PyTorch 2.0 SDPA attention: %s. "

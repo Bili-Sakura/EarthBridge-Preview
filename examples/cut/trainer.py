@@ -692,8 +692,9 @@ class CUTTrainer:
         netF = self.build_patch_sample_mlp()
 
         # Attention backend: xformers or flash-attn (PyTorch 2.0 SDPA)
-        # CUT uses ResNet generators without attention layers, so these are
-        # typically no-ops but are accepted for CLI consistency.
+        # CUT's default ResNet generators have no attention layers, so these
+        # flags are no-ops for standard CUT architectures.  They are accepted
+        # here for CLI consistency across all baselines.
         if getattr(cfg, "enable_xformers", False):
             try:
                 netG.enable_xformers_memory_efficient_attention()
