@@ -756,6 +756,36 @@ class DDBMTrainer:
         model = self.build_model(image_size=model_image_size)
         scheduler = self.build_scheduler()
 
+        # Attention backend: xformers or flash-attn (PyTorch 2.0 SDPA)
+        _inner = getattr(model, "unet", model)  # DDBMUNet wraps .unet; PixNerd is flat
+        if getattr(cfg, "enable_xformers", False):
+            try:
+                _inner.enable_xformers_memory_efficient_attention()
+                logger.info(f"[{cfg.task_name}] Enabled xformers memory-efficient attention")
+            except Exception as e:
+                logger.warning(
+                    "Could not enable xformers memory-efficient attention: %s. "
+                    "Make sure xformers is installed (`pip install xformers`).", e,
+                )
+        elif getattr(cfg, "enable_flash_attn", False):
+            try:
+                from diffusers.models.attention import Attention
+                from diffusers.models.attention_processor import AttnProcessor2_0
+                count = 0
+                for mod in _inner.modules():
+                    if isinstance(mod, Attention):
+                        mod.set_processor(AttnProcessor2_0())
+                        count += 1
+                logger.info(
+                    "[%s] Enabled PyTorch 2.0 SDPA (flash-attention) on %d attention layers",
+                    cfg.task_name, count,
+                )
+            except Exception as e:
+                logger.warning(
+                    "Could not enable PyTorch 2.0 SDPA attention: %s. "
+                    "Requires PyTorch >= 2.0.", e,
+                )
+
         # Representation alignment (REPA)
         # NOTE: REPA encodes the *target* (ground-truth) image, not the source.
         # Only SAR2RGB is currently supported (MaRS-Base-RGB encodes the RGB target).

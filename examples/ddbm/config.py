@@ -99,6 +99,10 @@ class TaskConfig:
     dataloader_num_workers: int = 4
     seed: int = 42
 
+    # ---- attention backend ----
+    enable_xformers: bool = False  # use xformers memory-efficient attention (requires xformers)
+    enable_flash_attn: bool = False  # use PyTorch 2.0 SDPA / flash-attention backend
+
     # ---- metric-based loss (MAVIC-T evaluation objective) ----
     use_mavic_loss: bool = False   # add LPIPS + L1 loss alongside denoising loss
     mavic_lpips_weight: float = 1.0
