@@ -691,6 +691,32 @@ class CUTTrainer:
         netD = self.build_discriminator()
         netF = self.build_patch_sample_mlp()
 
+        # Attention backend: xformers or flash-attn (PyTorch 2.0 SDPA)
+        # CUT uses ResNet generators without attention layers, so these are
+        # typically no-ops but are accepted for CLI consistency.
+        if getattr(cfg, "enable_xformers", False):
+            try:
+                netG.enable_xformers_memory_efficient_attention()
+                logger.info(f"[{cfg.task_name}] Enabled xformers memory-efficient attention on generator")
+            except Exception as e:
+                logger.warning(
+                    "Could not enable xformers on CUT generator (no attention layers?): %s", e,
+                )
+        elif getattr(cfg, "enable_flash_attn", False):
+            try:
+                from diffusers.models.attention import Attention
+                from diffusers.models.attention_processor import AttnProcessor2_0
+                count = 0
+                for mod in netG.modules():
+                    if isinstance(mod, Attention):
+                        mod.set_processor(AttnProcessor2_0())
+                        count += 1
+                logger.info(f"[{cfg.task_name}] Enabled PyTorch 2.0 SDPA on generator ({count} attention layers)")
+            except Exception as e:
+                logger.warning(
+                    "Could not enable PyTorch 2.0 SDPA on CUT generator: %s", e,
+                )
+
         nce_layers = [int(i) for i in cfg.nce_layers.split(",")]
 
         criterion_GAN = GANLoss(cfg.gan_mode)
