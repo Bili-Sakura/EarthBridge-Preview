@@ -126,6 +126,8 @@ See [docs/quick_start.md](docs/quick_start.md) for detailed training, inference,
 
 ### Reference papers
 
+Chen, Zhenyuan, Guanyuan Shen, and Feng Zhang. "EarthBridge: A Solution for 4th Multi-Modal Aerial View Image Challenge Translation Track." arXiv, March 6, 2026. <a href="https://doi.org/10.48550/arXiv.2603.06753">https://doi.org/10.48550/arXiv.2603.06753</a>.
+
 <a href="https://openreview.net/forum?id=eghAocvqBk">Diffusion Bridge Implicit Models (DBIM, 2025)</a>
 
 <a href="https://link.springer.com/chapter/10.1007/978-3-030-58545-7_19">Contrastive Unpaired Translation (CUT, ECCV 2020)</a>
