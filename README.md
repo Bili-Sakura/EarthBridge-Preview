@@ -2,7 +2,7 @@
 
 **EarthBridge: A Solution for the 4th Multi-modal Aerial View Image Challenge (MAVIC-T) — Translation Track**
 
-Chen, Zhenyuan, Guanyuan Shen, and Feng Zhang. "EarthBridge: A Solution for 4th Multi-Modal Aerial View Image Challenge Translation Track." arXiv, March 6, 2026. [https://doi.org/10.48550/arXiv.2603.06753](https://doi.org/10.48550/arXiv.2603.06753)
+Chen, Zhenyuan, Guanyuan Shen, and Feng Zhang. "EarthBridge: A Solution for 4th Multi-Modal Aerial View Image Challenge Translation Track." Accepted to the [22nd IEEE CVPR Workshop on Perception Beyond the Visible Spectrum (PBVS 2026)](https://pbvs-workshop.github.io/). Preprint: arXiv, March 6, 2026. [https://doi.org/10.48550/arXiv.2603.06753](https://doi.org/10.48550/arXiv.2603.06753)
 
 This repository is a **preview release** of the EarthBridge codebase, containing the **DBIM** and **CUT** baselines used in our competition solution, along with their related training, inference, and evaluation code.
 
