@@ -90,13 +90,13 @@ def parse_args():
         "--multidiffusion_window_size",
         type=int,
         default=None,
-        help="MultiDiffusion: tile window size in pixels (default 512). Overrides src.utils.multidiffusion default.",
+        help="MultiDiffusion: tile window size in pixels (default 512). Overrides pipeline default.",
     )
     parser.add_argument(
         "--multidiffusion_stride",
         type=int,
         default=None,
-        help="MultiDiffusion: stride between tiles in pixels (default 64). Overrides src.utils.multidiffusion default.",
+        help="MultiDiffusion: stride between tiles in pixels (default 64). Overrides pipeline default.",
     )
     args = parser.parse_args()
     args.device = args.device or ("cuda" if torch.cuda.is_available() else "cpu")
