@@ -13,7 +13,7 @@
 #   OUTPUT_SIZE="1024 1024" VIEW_BATCH_SIZE=4 bash scripts/DBIM_Pixel_Medium-0216/eval_all.sh
 #
 # If OOM or dead GPU memory: pkill -9 -f "python.*evaluate"  (kill eval processes)
-# Override MultiDiffusion defaults (from src/utils/multidiffusion.py):
+# Override MultiDiffusion defaults (see DEFAULT_PIXEL_* in src/utils/multidiffusion.py):
 #   MD_INPUT_SIZE=512  (source resize before pipeline; default 512)
 #   MD_WINDOW_SIZE=512 (tile size in px; default 512)
 #   MD_STRIDE=64       (stride between tiles; default 64)
